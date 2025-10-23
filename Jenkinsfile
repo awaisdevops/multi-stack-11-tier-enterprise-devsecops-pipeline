@@ -64,8 +64,9 @@ pipeline {
             steps {
                 script {
                     echo "building the application with Gradle..."
-                    sh 'rm -rf ~/.gradle/caches'  // Clear Gradle cache to prevent stale compiled files
-                    sh './gradlew clean installDist'
+                    sh 'rm -rf ~/.gradle/caches'  // Clear Gradle cache
+                    sh 'rm -rf build/'  // Clear local build directory
+                    sh './gradlew clean --no-daemon installDist'
                 }
             }
         }                     
