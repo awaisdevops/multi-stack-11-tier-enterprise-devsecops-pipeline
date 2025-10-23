@@ -1,0 +1,38 @@
+# Gradle
+.gradle
+build/
+!build/tmp/
+!build/wrapper/
+
+# IDE files
+.idea/
+*.iml
+*.ipr
+*.iws
+.project
+.classpath
+.settings/
+*.DS_Store
+
+# Log files
+*.log
+
+# Dependency Check reports
+dependency-check-reports/
+dependency-check-report.*
+
+# Trivy reports
+trivy-*.json
+
+# Local build artifacts
+out/
+bin/
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db

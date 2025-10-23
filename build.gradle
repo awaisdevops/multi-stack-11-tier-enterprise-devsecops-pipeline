@@ -3,6 +3,7 @@ plugins {
     id 'com.github.sherter.google-java-format' version '0.9'
     id 'idea'
     id 'application'
+    id 'org.sonarqube' version '4.4.1.3373'
 }
 
 repositories {
@@ -22,6 +23,11 @@ def protocVersion = "3.22.3"
 tasks.withType(JavaCompile) {
     sourceCompatibility = JavaVersion.VERSION_19
     targetCompatibility = JavaVersion.VERSION_19
+}
+
+// Add JUnit 5 platform support for testing
+test {
+    useJUnitPlatform()
 }
 
 ext {
@@ -46,6 +52,12 @@ dependencies {
         runtimeOnly "com.fasterxml.jackson.core:jackson-core:${jacksonCoreVersion}",
                 "com.fasterxml.jackson.core:jackson-databind:${jacksonDatabindVersion}",
                 "io.netty:netty-tcnative-boringssl-static:2.0.61.Final"
+        
+        // Add JUnit 5 and Mockito for testing
+        testImplementation 'org.junit.jupiter:junit-jupiter-api:5.9.2'
+        testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.2'
+        testImplementation 'org.mockito:mockito-core:4.8.1'
+        testImplementation 'org.mockito:mockito-junit-jupiter:4.8.1'
     }
 }
 
@@ -79,7 +91,29 @@ sourceSets {
             srcDirs 'build/generated/source/proto/main/grpc/hipstershop'
         }
     }
+    // Define a new source set for integration tests
+    integrationTest {
+        java.srcDir file('src/integrationTest/java')
+        resources.srcDir file('src/integrationTest/resources')
+        compileClasspath += sourceSets.main.output + configurations.testRuntimeClasspath
+        runtimeClasspath += output + compileClasspath
+    }
 }
+
+// Create a task to run integration tests
+task integrationTest(type: Test) {
+    description = 'Runs integration tests.'
+    group = 'verification'
+    testClassesDirs = sourceSets.integrationTest.output.classesDirs
+    classpath = sourceSets.integrationTest.runtimeClasspath
+    useJUnitPlatform()
+    // Ensure integration tests run after unit tests
+    shouldRunAfter(test)
+}
+
+// Make the 'check' task depend on integration tests, so they run together
+check.dependsOn integrationTest
+
 
 startScripts.enabled = false
 
