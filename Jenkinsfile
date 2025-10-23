@@ -1,3 +1,9 @@
+@NonCPS
+def extractVersion(text) {
+    def matcher = text =~ /version = "(.+)"/
+    return matcher.find() ? matcher.group(1) : null
+}
+
 pipeline {
     agent any
         
@@ -24,7 +30,7 @@ pipeline {
                     def buildFile = 'build.gradle'
                     def content = readFile(buildFile)
                     
-                    def currentVersionString = (content =~ /version = "(.+)"/).with { find() ? group(1) : null }
+                    def currentVersionString = extractVersion(content)
                     if (currentVersionString == null) {
                         error "Could not find a version in build.gradle"
                     }
