@@ -24,12 +24,12 @@ pipeline {
                     def buildFile = 'build.gradle'
                     def content = readFile(buildFile)
                     
-                    def versionMatcher = content =~ /version = "(.+)"/
-                    if (!versionMatcher) {
+                    def matches = (content =~ /version = "(.+)"/) as List
+                    if (matches.isEmpty()) {
                         error "Could not find a version in build.gradle"
                     }
                     
-                    def currentVersionString = versionMatcher[0][1] 
+                    def currentVersionString = matches[0][1] 
                     def versionParts = currentVersionString.replace("-SNAPSHOT", "").split('\\.')
                     
                     def major = versionParts[0] as int
