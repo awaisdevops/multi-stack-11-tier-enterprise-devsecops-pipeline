@@ -8,7 +8,7 @@ pipeline {
     agent any
     
     tools {
-        jdk 'jdk21' 
+        jdk 'jdk19' 
     }
         
     // Environment-specific configurations
@@ -64,6 +64,7 @@ pipeline {
             steps {
                 script {
                     echo "building the application with Gradle..."
+                    sh 'rm -rf ~/.gradle/caches'  // Clear Gradle cache
                     sh './gradlew clean installDist'
                 }
             }
