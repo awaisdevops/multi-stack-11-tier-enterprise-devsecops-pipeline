@@ -7,9 +7,9 @@ def extractVersion(text) {
 pipeline {
     agent any
     
-    tools {
-        jdk 'jdk21' 
-    }
+    //tools {
+        //jdk 'jdk19' 
+    //}
         
     // Environment-specific configurations
     environment {
