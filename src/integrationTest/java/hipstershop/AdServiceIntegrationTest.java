@@ -19,11 +19,14 @@ class AdServiceIntegrationTest {
     private static AdServiceGrpc.AdServiceBlockingStub blockingStub;
 
     @BeforeAll
-    static void setUpServer() throws IOException {
+    static void setUpServer() throws IOException, InterruptedException {
         int port = 9556; // Use a different port than default to avoid conflicts
         System.setProperty("PORT", String.valueOf(port));
         server = new AdService();
         server.start();
+        
+        // Give the server time to bind to the port and be ready to accept connections
+        Thread.sleep(1000);
 
         channel = ManagedChannelBuilder.forAddress("localhost", port)
                 .usePlaintext()
