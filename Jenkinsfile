@@ -178,17 +178,17 @@ pipeline {
                         # Set the remote URL using the PAT-based authentication
                         git remote set-url origin "https://x-oauth-basic:${PASS}@github.com/awaisdevops/enterprise-devsecops-java-pipeline1.git"
                         
+                        # Fetch latest remote changes
+                        git fetch origin
+                        
+                        # Checkout main branch and reset to origin/main to ensure clean state
+                        git checkout -B main origin/main || git checkout -b main origin/main
+                        
                         # Stage and commit the version bump
                         git add build.gradle
                         git commit -m "ci: Automated version bump [skip ci]" || echo "No changes to commit"
                         
-                        # Fetch latest remote changes
-                        git fetch origin
-                        
-                        # Pull with merge strategy to integrate remote changes
-                        git pull --no-ff origin main || true
-                        
-                        # Push the commits
+                        # Push the commits to main
                         git push origin main
                     '''
                     }
