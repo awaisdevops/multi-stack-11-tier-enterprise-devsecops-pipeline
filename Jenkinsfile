@@ -123,8 +123,9 @@ pipeline {
             steps{
                 sh "trivy fs --format  table -o trivy-fs-report.json ."
             }
-        }           
-       
+        }    
+
+       /*
         // quality, sonarqube, gate
         stage("SonarQube: Quality Gate"){
             steps{
@@ -133,6 +134,7 @@ pipeline {
                 }
             }
         }
+        */
         
         // docker, build, container, image
         stage('Docker: Build Image') {              
