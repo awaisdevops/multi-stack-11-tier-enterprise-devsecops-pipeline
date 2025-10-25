@@ -1,8 +1,9 @@
-@NonCPS
+/*@NonCPS
 def extractVersion(text) {
     def matcher = text =~ /version = "(.+)"/
     return matcher.find() ? matcher.group(1) : null
 }
+*/
 
 pipeline {
     agent any
@@ -22,7 +23,8 @@ pipeline {
         // Sonar Qube
         SONAR_HOME= tool "SQ"
     }   
-    
+
+    /*
     stages {        
         
         // versioning, gradle, git
@@ -89,7 +91,7 @@ pipeline {
             post {
                 always {
                     // Collect and publish JUnit test reports from Gradle's default location
-                    junit allowEmptyResults: true, testResults: '**/build/test-results/test/TEST-*.xml' 
+                    junit allowEmptyResults: true, testResults: '/build/test-results/test/TEST-*.xml' //here
                 }
             }
         }
@@ -103,7 +105,7 @@ pipeline {
             post {
                 always {
                     // Collect and publish integration test reports
-                    junit allowEmptyResults: true, testResults: '**/build/test-results/integrationTest/TEST-*.xml'
+                    junit allowEmptyResults: true, testResults: '/build/test-results/integrationTest/TEST-*.xml' //here
                 }
             }
         }
@@ -116,7 +118,7 @@ pipeline {
                 dependencyCheckPublisher pattern: '/app-dep-check-report.html'
             }
         }    
-        */  
+         
         
         // security, vulnerability, trivy, sast
         stage("Trivy: Filesystem Scan"){
@@ -134,7 +136,7 @@ pipeline {
                 }
             }
         }
-        */
+        
         
         // docker, build, container, image
         stage('Docker: Build Image') {              
@@ -160,7 +162,8 @@ pipeline {
                 }
             }
         }                                  
-           
+        */
+
         // git, versioning, commit, scm
         stage('Commit App Version') {
             steps {
@@ -182,7 +185,7 @@ pipeline {
                         git fetch origin
                         
                         # Pull with merge strategy to integrate remote changes
-                        git pull origin main --no-ff -m "ci: Merge remote changes [skip ci]" || true
+                        git pull --no-ff origin main || true
                         
                         # Push the commits
                         git push origin main
