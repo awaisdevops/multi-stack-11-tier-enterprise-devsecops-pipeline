@@ -1,9 +1,9 @@
-/*@NonCPS
+@NonCPS
 def extractVersion(text) {
     def matcher = text =~ /version = "(.+)"/
     return matcher.find() ? matcher.group(1) : null
 }
-*/
+
 
 pipeline {
     agent any
@@ -26,8 +26,7 @@ pipeline {
 
     
     stages {        
-        
-        /*
+                
         // versioning, gradle, git
         stage('App Version Bump') {
             steps {
@@ -92,7 +91,7 @@ pipeline {
             post {
                 always {
                     // Collect and publish JUnit test reports from Gradle's default location
-                    junit allowEmptyResults: true, testResults: '/build/test-results/test/TEST-*.xml' //here
+                    junit allowEmptyResults: true, testResults: '**/build/test-results/test/TEST-*.xml' 
                 }
             }
         }
@@ -106,7 +105,7 @@ pipeline {
             post {
                 always {
                     // Collect and publish integration test reports
-                    junit allowEmptyResults: true, testResults: '/build/test-results/integrationTest/TEST-*.xml' //here
+                    junit allowEmptyResults: true, testResults: '**/build/test-results/integrationTest/TEST-*.xml' 
                 }
             }
         }
@@ -118,7 +117,7 @@ pipeline {
                 dependencyCheck additionalArguments: '--scan ./', odcInstallation: 'dc'
                 dependencyCheckPublisher pattern: '/app-dep-check-report.html'
             }
-        }    
+        }   */ 
          
         
         // security, vulnerability, trivy, sast
@@ -127,7 +126,6 @@ pipeline {
                 sh "trivy fs --format  table -o trivy-fs-report.json ."
             }
         }    
-
        /*
         // quality, sonarqube, gate
         stage("SonarQube: Quality Gate"){
@@ -136,7 +134,7 @@ pipeline {
                     waitForQualityGate abortPipeline: false
                 }
             }
-        }
+        }*/
         
         
         // docker, build, container, image
