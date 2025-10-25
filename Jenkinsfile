@@ -1,12 +1,28 @@
-stage('Docker: Build Image') {              
+pipeline {
+    agent any
+
+    stages {
+        stage('Build & Tag Docker Image') {
             steps {
                 script {
-                    echo "building the docker image..."
-                    withCredentials([usernamePassword(credentialsId: 'docker-hub-repo', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
+                    dir('src') {
+
+                    withDockerRegistry(credentialsId: 'docker-hub-repo', toolName: 'docker') {
                         sh "docker build -t awaisakram11199/devopsimages:cartservice01 ."
-                        sh 'echo $PASS | docker login -u $USER --password-stdin'
-                        sh "docker push awaisakram11199/devopsimages:cartservice01"
+                    }
+                        }
+                }
+            }
+        }
+        
+        stage('Push Docker Image') {
+            steps {
+                script {
+                    withDockerRegistry(credentialsId: 'docker-hub-repo', toolName: 'docker') {
+                        sh "docker pushawaisakram11199/devopsimages:cartservice01 "
                     }
                 }
             }
-        } 
+        }
+    }
+}
