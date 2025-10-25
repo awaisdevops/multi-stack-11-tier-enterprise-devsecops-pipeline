@@ -178,12 +178,14 @@ pipeline {
                         git add build.gradle
                         git commit -m "ci: Automated version bump [skip ci]" || echo "No changes to commit"
                         
-                        # Fetch latest remote changes and rebase
+                        # Fetch latest remote changes
                         git fetch origin
-                        git rebase origin/main
                         
-                        # Push the rebased commits
-                        git push origin HEAD:main
+                        # Pull with merge strategy to integrate remote changes
+                        git pull origin main --no-ff -m "ci: Merge remote changes [skip ci]" || true
+                        
+                        # Push the commits
+                        git push origin main
                     '''
                     }
                 }
