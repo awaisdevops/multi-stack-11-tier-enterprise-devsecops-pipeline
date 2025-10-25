@@ -166,28 +166,23 @@ pipeline {
             steps {
                 script {
                   withCredentials([usernamePassword(credentialsId: 'github-credentials', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
-                    // --- GITHUB PAT AUTH FIX ---
-                    def patUsername = "x-oauth-basic"
-                    def remoteUrl = "https://${patUsername}:${PASS}@github.com/awaisdevops/enterprise-devsecops-java-pipeline1.git"
-                    // ---------------------------
-
-                    // 1. Configure Git for the commit author                    
-                    sh 'git config --global user.email "jenkins@example.com"'
-                    sh 'git config --global user.name "jenkins"'
-
-                    // 2. Set the remote URL using the PAT-based authentication URL                    
-                    sh "git remote set-url origin ${remoteUrl}"
-                    
-                    // 3. Fetch latest remote changes and rebase
                     sh '''
-                        git fetch origin
-                        git rebase origin/main
-                    '''
-                    
-                    // 4. Commit and Push the updated build file
-                    sh '''
+                        # Configure Git for the commit author
+                        git config --global user.email "jenkins@example.com"
+                        git config --global user.name "jenkins"
+                        
+                        # Set the remote URL using the PAT-based authentication
+                        git remote set-url origin "https://x-oauth-basic:${PASS}@github.com/awaisdevops/enterprise-devsecops-java-pipeline1.git"
+                        
+                        # Stage and commit the version bump
                         git add build.gradle
                         git commit -m "ci: Automated version bump [skip ci]" || echo "No changes to commit"
+                        
+                        # Fetch latest remote changes and rebase
+                        git fetch origin
+                        git rebase origin/main
+                        
+                        # Push the rebased commits
                         git push origin HEAD:main
                     '''
                     }
