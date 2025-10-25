@@ -178,10 +178,16 @@ pipeline {
                     // 2. Set the remote URL using the PAT-based authentication URL                    
                     sh "git remote set-url origin ${remoteUrl}"
                     
-                    // 3. Commit and Push the updated build file
+                    // 3. Fetch latest remote changes and rebase
+                    sh '''
+                        git fetch origin
+                        git rebase origin/main
+                    '''
+                    
+                    // 4. Commit and Push the updated build file
                     sh '''
                         git add build.gradle
-                        git commit -m "ci: Automated version bump [skip ci]"
+                        git commit -m "ci: Automated version bump [skip ci]" || echo "No changes to commit"
                         git push origin HEAD:main
                     '''
                     }
