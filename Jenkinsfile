@@ -19,7 +19,7 @@ pipeline {
             steps {
                 script {
                     withDockerRegistry(credentialsId: 'docker-hub-repo', toolName: 'docker') {
-                        sh "docker pushawaisakram11199/devopsimages:cartservice01 "
+                        sh "docker push awaisakram11199/devopsimages:cartservice01 "
                     }
                 }
             }
