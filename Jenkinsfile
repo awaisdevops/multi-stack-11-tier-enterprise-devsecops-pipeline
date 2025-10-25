@@ -73,13 +73,9 @@ pipeline {
   
         // analysis, quality, sonarqube, security
         stage("SonarQube: Code Scan"){
-            steps{
-                script {
-                    try {
-                        withSonarQubeEnv("SQ"){                    
-                            sh "./gradlew sonar -Dsonar.host.url=http://3.37.89.125:9000"
-                        }
-                    } 
+            steps{                
+                withSonarQubeEnv("SQ"){                    
+                    sh "./gradlew sonar -Dsonar.host.url=http://3.37.89.125:9000"
                 }
             }
         }     
