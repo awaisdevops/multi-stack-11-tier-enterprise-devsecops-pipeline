@@ -24,9 +24,10 @@ pipeline {
         SONAR_HOME= tool "SQ"
     }   
 
-    /*
+    
     stages {        
         
+        /*
         // versioning, gradle, git
         stage('App Version Bump') {
             steps {
@@ -194,7 +195,7 @@ pipeline {
                 }
             }
         }
-    }
+    }   
     
     post {
         // Send email on successful completion
